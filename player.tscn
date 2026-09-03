@@ -44,11 +44,10 @@ size = Vector2(16, 16)
 [node name="Player" type="CharacterBody2D" unique_id=1520507009]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1911030700]
-position = Vector2(7.9999995, 3.9999998)
-scale = Vector2(0.9166667, 1.0000001)
+position = Vector2(8, 0.99999976)
+scale = Vector2(1.1, 1.2)
 sprite_frames = SubResource("SpriteFrames_dg5fb")
 autoplay = "default"
-frame_progress = 0.049644616
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=152756907]
 position = Vector2(8, 8)
