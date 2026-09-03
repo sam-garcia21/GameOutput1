@@ -63,9 +63,11 @@ func _move_to(targetPosition):
 
 func _set_animation():
 	if currentDirection.x > 0:
-		animated_sprite_2d.play("run_right")
+		animated_sprite_2d.flip_h = false
+		animated_sprite_2d.play("run_side")
 	elif currentDirection.x < 0:
-		animated_sprite_2d.play("run_left")
+		animated_sprite_2d.flip_h = true
+		animated_sprite_2d.play("run_side")
 	elif currentDirection.y < 0:
 		animated_sprite_2d.play("run_up")
 	elif currentDirection.y > 0:
