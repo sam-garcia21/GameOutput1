@@ -14,11 +14,14 @@ var lastDirection: Vector2
 
 func _physics_process(_delta: float) -> void:
 	if onMove:
+		print("is moving")
 		return
 		
 	if has_forced_movement():
+		print("forced moving")
 		return
-		
+	
+	print("not moving")
 	_normal_movement()
 	
 	_set_animation()
@@ -41,8 +44,9 @@ func _normal_movement():
 	currentDirection = direction
 	
 	if direction:
-		ray_cast_2d.target_position = direction * TILE_SIZE
-		ray_cast_2d.force_raycast_update()
+		if direction:
+			ray_cast_2d.target_position = direction * TILE_SIZE
+			ray_cast_2d.force_raycast_update()
 		
 		# Checks if the player collision is colliding. If yes, returns.
 		if ray_cast_2d.is_colliding(): return
@@ -98,8 +102,9 @@ func has_forced_movement():
 		if data:
 			var is_ice = data.get_custom_data("is_ice")
 			if is_ice:
-				ray_cast_2d.target_position = currentDirection * TILE_SIZE
-				ray_cast_2d.force_raycast_update()
+				if currentDirection:
+					ray_cast_2d.target_position = currentDirection * TILE_SIZE
+					ray_cast_2d.force_raycast_update()
 				
 				# Checks if the player collision is colliding. If yes, returns.
 				if ray_cast_2d.is_colliding(): return false
