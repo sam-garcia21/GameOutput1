@@ -78,8 +78,7 @@ func _set_animation():
 	else:
 		_idle_animation()
 
-# conditions for idle animation
-# TODO: need idle for left and right i think not just side
+# set to idle animation
 func _idle_animation():
 	if lastDirection.x > 0:
 		animated_sprite_2d.flip_h = false
@@ -92,6 +91,7 @@ func _idle_animation():
 	elif lastDirection.y > 0:
 		animated_sprite_2d.play("idle_down")
 			
+# checks if player is on tiles that force movement
 func _has_forced_movement():
 	var ice_tilemap = get_node("/root/Game/TileMap/Ice")
 	var arrow_tilemap = get_node("/root/Game/TileMap/Arrows")
@@ -105,18 +105,14 @@ func _has_forced_movement():
 				if currentDirection:
 					ray_cast_2d.target_position = currentDirection * TILE_SIZE
 					ray_cast_2d.force_raycast_update()
-				
-				# Checks if the player collision is colliding. If yes, returns.
 				if ray_cast_2d.is_colliding(): return false
 				
-				# Computes the next target position of the player.
 				var targetPosition = global_position + currentDirection * TILE_SIZE
-				
+				lastDirection = currentDirection
 				_idle_animation()
 				_move_to(targetPosition)
-				lastDirection = currentDirection
 				return true
-	
+
 	if arrow_tilemap:
 		var cell = arrow_tilemap.local_to_map(position)
 		var data = arrow_tilemap.get_cell_tile_data(cell)
@@ -127,13 +123,11 @@ func _has_forced_movement():
 				if arrow_direction:
 					ray_cast_2d.target_position = arrow_direction * TILE_SIZE
 					ray_cast_2d.force_raycast_update()
-				
-				# Checks if the player collision is colliding. If yes, returns.
 				if ray_cast_2d.is_colliding(): return false
 				
-				# Computes the next target position of the player.
 				var targetPosition = global_position + arrow_direction * TILE_SIZE
 				lastDirection = arrow_direction
 				_idle_animation()
 				_move_to(targetPosition)
+				
 				return true
