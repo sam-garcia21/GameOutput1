@@ -16,6 +16,9 @@ func _physics_process(_delta: float) -> void:
 	if onMove:
 		return
 		
+	if has_forced_movement():
+		return
+		
 	_normal_movement()
 	
 	_set_animation()
@@ -75,6 +78,8 @@ func _set_animation():
 	else:
 		idle_animation()
 
+# conditions for idle animation
+# TODO: need idle for left and right i think not just side
 func idle_animation():
 	if lastDirection.x:
 		animated_sprite_2d.play("idle_side")
@@ -83,3 +88,24 @@ func idle_animation():
 	elif lastDirection.y > 0:
 		animated_sprite_2d.play("idle_down")
 			
+func has_forced_movement():
+	var ice_tilemap = get_node("/root/Game/TileMap/Ice")
+	var arrow_tilemap = get_node("/root/Game/TileMap/Arrows")
+	
+	if ice_tilemap:
+		var cell = ice_tilemap.local_to_map(position)
+		var data = ice_tilemap.get_cell_tile_data(cell)
+		if data:
+			var is_ice = data.get_custom_data("is_ice")
+			if is_ice:
+				ray_cast_2d.target_position = currentDirection * TILE_SIZE
+				ray_cast_2d.force_raycast_update()
+				
+				# Checks if the player collision is colliding. If yes, returns.
+				if ray_cast_2d.is_colliding(): return false
+				
+				# Computes the next target position of the player.
+				var targetPosition = global_position + currentDirection * TILE_SIZE
+				
+				_move_to(targetPosition)
+				return true
