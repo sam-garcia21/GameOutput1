@@ -47,8 +47,6 @@ func _normal_movement():
 		# Computes the next target position of the player.
 		var targetPosition = global_position + direction * TILE_SIZE
 		
-		print(targetPosition)
-		
 		_move_to(targetPosition)
 
 func _move_to(targetPosition):
@@ -61,20 +59,27 @@ func _move_to(targetPosition):
 	onMove = false
 
 func _set_animation():
-	if currentDirection.x > 0:
-		animated_sprite_2d.flip_h = false
-		animated_sprite_2d.play("run_side")
-	elif currentDirection.x < 0:
-		animated_sprite_2d.flip_h = true
-		animated_sprite_2d.play("run_side")
-	elif currentDirection.y < 0:
-		animated_sprite_2d.play("run_up")
-	elif currentDirection.y > 0:
-		animated_sprite_2d.play("run_down")
+	if not ray_cast_2d.is_colliding():
+		if currentDirection.x > 0:
+			animated_sprite_2d.flip_h = false
+			animated_sprite_2d.play("run_side")
+		elif currentDirection.x < 0:
+			animated_sprite_2d.flip_h = true
+			animated_sprite_2d.play("run_side")
+		elif currentDirection.y < 0:
+			animated_sprite_2d.play("run_up")
+		elif currentDirection.y > 0:
+			animated_sprite_2d.play("run_down")
+		else:
+			idle_animation()
 	else:
-		if lastDirection.x:
-			animated_sprite_2d.play("idle_side")
-		elif lastDirection.y < 0:
-			animated_sprite_2d.play("idle_up")
-		elif lastDirection.y > 0:
-			animated_sprite_2d.play("idle_down")
+		idle_animation()
+
+func idle_animation():
+	if lastDirection.x:
+		animated_sprite_2d.play("idle_side")
+	elif lastDirection.y < 0:
+		animated_sprite_2d.play("idle_up")
+	elif lastDirection.y > 0:
+		animated_sprite_2d.play("idle_down")
+			
