@@ -81,7 +81,11 @@ func _set_animation():
 # conditions for idle animation
 # TODO: need idle for left and right i think not just side
 func _idle_animation():
-	if lastDirection.x:
+	if lastDirection.x > 0:
+		animated_sprite_2d.flip_h = false
+		animated_sprite_2d.play("idle_side")
+	elif lastDirection.x < 0:
+		animated_sprite_2d.flip_h = true
 		animated_sprite_2d.play("idle_side")
 	elif lastDirection.y < 0:
 		animated_sprite_2d.play("idle_up")
