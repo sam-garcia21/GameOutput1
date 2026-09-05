@@ -14,16 +14,12 @@ var lastDirection: Vector2
 
 func _physics_process(_delta: float) -> void:
 	if onMove:
-		print("is moving")
 		return
 		
 	if has_forced_movement():
-		print("forced moving")
 		return
 	
-	print("not moving")
 	_normal_movement()
-	
 	_set_animation()
 	
 	lastDirection = currentDirection
@@ -111,6 +107,26 @@ func has_forced_movement():
 				
 				# Computes the next target position of the player.
 				var targetPosition = global_position + currentDirection * TILE_SIZE
+				
+				_move_to(targetPosition)
+				return true
+	
+	if arrow_tilemap:
+		var cell = arrow_tilemap.local_to_map(position)
+		var data = arrow_tilemap.get_cell_tile_data(cell)
+		if data:
+			var is_arrow = data.get_custom_data("is_arrow")
+			if is_arrow:
+				var arrow_direction = data.get_custom_data("arrow_direction")
+				if arrow_direction:
+					ray_cast_2d.target_position = arrow_direction * TILE_SIZE
+					ray_cast_2d.force_raycast_update()
+				
+				# Checks if the player collision is colliding. If yes, returns.
+				if ray_cast_2d.is_colliding(): return false
+				
+				# Computes the next target position of the player.
+				var targetPosition = global_position + arrow_direction * TILE_SIZE
 				
 				_move_to(targetPosition)
 				return true
