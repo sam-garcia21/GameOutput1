@@ -47,12 +47,11 @@ func _normal_movement():
 		# Computes the next target position of the player.
 		var targetPosition = global_position + direction * TILE_SIZE
 		
+		print(targetPosition)
+		
 		_move_to(targetPosition)
 
 func _move_to(targetPosition):
-	if not targetPosition:
-		return
-	
 	onMove = true
 	
 	var tween = create_tween()
