@@ -1,4 +1,5 @@
 extends CharacterBody2D
+class_name NPC
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var ray_cast_2d: RayCast2D = $RayCast2D
@@ -52,9 +53,7 @@ func _normal_movement():
 		
 		# Checks if the player collision is colliding. If yes, returns.
 		if ray_cast_2d.is_colliding():
-			if _not_cliff_face():
-				print("valid path")
-			else:
+			if not _not_cliff_face():
 				return
 		
 		# Computes the next target position of the player.
@@ -68,7 +67,6 @@ func _move_to(targetPosition):
 	var tween = create_tween()
 	tween.tween_property(self, "global_position", targetPosition, 0.3)
 	await tween.finished
-	print(position)
 	onMove = false
 	teleporterJustUsed = false
 
@@ -187,7 +185,15 @@ func _use_teleporter():
 					position = teleporter_tilemap.map_to_local(cellTo) + posCorrecter
 					teleporterJustUsed = true
 				
-
+func pushed(direction: Vector2):
+	if onMove: return
+	ray_cast_2d.target_position = direction * TILE_SIZE
+	ray_cast_2d.force_raycast_update()
+	if ray_cast_2d.is_colliding():
+		return
+		
+	var targetPosition = global_position + direction * TILE_SIZE
+	_move_to(targetPosition)
 
 func _on_timer_timeout() -> void:
 	var movement = randi_range(1, 4)

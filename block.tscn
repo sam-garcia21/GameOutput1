@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://d3b8quvpjlxiy"]
+
+[ext_resource type="Texture2D" uid="uid://0flsgu5s3ymg" path="res://assets/TileMap/Solaria Demo Tiles.png" id="1_im0tn"]
+[ext_resource type="Script" uid="uid://set85jmhnom3" path="res://scripts/block.gd" id="1_xfwl5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ax885"]
+size = Vector2(16, 16)
+
+[node name="box" type="StaticBody2D" unique_id=746029886]
+top_level = true
+script = ExtResource("1_xfwl5")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1441944535]
+position = Vector2(8, 8)
+texture = ExtResource("1_im0tn")
+region_enabled = true
+region_rect = Rect2(144, 112, 16, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=707088232]
+position = Vector2(8, 8)
+shape = SubResource("RectangleShape2D_ax885")
+
+[node name="RayCast2D" type="RayCast2D" parent="." unique_id=867508378]
+position = Vector2(8, 7)
+collision_mask = 3

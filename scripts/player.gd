@@ -14,6 +14,9 @@ var lastDirection: Vector2
 
 var teleporterJustUsed = false
 
+func _ready() -> void:
+	ray_cast_2d.target_position = Vector2.DOWN * TILE_SIZE
+
 func _physics_process(_delta: float) -> void:
 	if onMove:
 		return
@@ -49,9 +52,8 @@ func _normal_movement():
 		
 		# Checks if the player collision is colliding. If yes, returns.
 		if ray_cast_2d.is_colliding():
-			if _not_cliff_face():
-				print("valid path")
-			else:
+			_is_pushing_block()
+			if not _not_cliff_face():
 				return
 		
 		# Computes the next target position of the player.
@@ -65,7 +67,6 @@ func _move_to(targetPosition):
 	var tween = create_tween()
 	tween.tween_property(self, "global_position", targetPosition, 0.3)
 	await tween.finished
-	print(position)
 	onMove = false
 	teleporterJustUsed = false
 
@@ -184,3 +185,8 @@ func _use_teleporter():
 					position = teleporter_tilemap.map_to_local(cellTo) + posCorrecter
 					teleporterJustUsed = true
 				
+func _is_pushing_block():
+	if ray_cast_2d.get_collider() is Block or ray_cast_2d.get_collider() is NPC:
+		ray_cast_2d.get_collider().pushed(currentDirection)
+		return true
+	
