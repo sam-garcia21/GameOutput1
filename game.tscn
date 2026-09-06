@@ -544,6 +544,10 @@ tile_set = ExtResource("2_feb5d")
 tile_map_data = PackedByteArray("AAD+/wcAAAABAAgAAAD//wcAAAABAAgAAAAAAAcAAAABAAgAAAD8/wYAAAAAAAcAAAD8/wUAAAAAAAcAAAACAAYAAAACAAcAAAACAAUAAAACAAcAAAD+/wUAAAABAAYAAAD//wUAAAABAAYAAAAAAAUAAAABAAYAAAA=")
 tile_set = ExtResource("2_feb5d")
 
+[node name="TeleportDevice" type="TileMapLayer" parent="TileMap" unique_id=1701474251]
+tile_map_data = PackedByteArray("AAD8/wAAAAAWAAgAAAD8//z/AAAXAAkAAAA=")
+tile_set = ExtResource("2_feb5d")
+
 [node name="Player" parent="." unique_id=1520507009 instance=ExtResource("1_80nbo")]
 z_index = 1
 

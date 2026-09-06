@@ -12,6 +12,8 @@ var onMove = false
 var currentDirection: Vector2
 var lastDirection: Vector2
 
+var teleporterJustUsed = false
+
 func _physics_process(_delta: float) -> void:
 	if onMove:
 		return
@@ -19,6 +21,7 @@ func _physics_process(_delta: float) -> void:
 	if _has_forced_movement():
 		return
 	
+	_use_teleporter()
 	_normal_movement()
 	_set_animation()
 	
@@ -62,8 +65,9 @@ func _move_to(targetPosition):
 	var tween = create_tween()
 	tween.tween_property(self, "global_position", targetPosition, 0.3)
 	await tween.finished
-	
+	print(position)
 	onMove = false
+	teleporterJustUsed = false
 
 func _set_animation():
 	if not ray_cast_2d.is_colliding() or _not_cliff_face():
@@ -160,4 +164,29 @@ func _not_cliff_face():
 						return false
 				return true
 	return false
+
+func _use_teleporter():
+	var teleporter_tilemap = get_node("/root/Game/TileMap/TeleportDevice")
+	var teleportTo: int
+	var cellTo
+	const posCorrecter := Vector2(-8,-8)
 	
+	if teleporter_tilemap:
+		if !teleporterJustUsed:
+			var cell = teleporter_tilemap.local_to_map(position)
+			var data = teleporter_tilemap.get_cell_tile_data(cell)
+			if data:
+				var is_teleporter = data.get_custom_data("is_teleporter")
+				if is_teleporter:
+					if data.get_custom_data("id") == 1:
+						teleportTo = 2
+					elif data.get_custom_data("id") == 2:
+						teleportTo = 1
+					for outCell in teleporter_tilemap.get_used_cells():
+						var outData = teleporter_tilemap.get_cell_tile_data(outCell)
+						if outData.get_custom_data("id") == teleportTo:
+							cellTo = outCell
+							break
+					position = teleporter_tilemap.map_to_local(cellTo) + posCorrecter
+					teleporterJustUsed = true
+				

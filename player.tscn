@@ -257,7 +257,7 @@ script = ExtResource("1_onrkg")
 position = Vector2(8, 0.99999976)
 scale = Vector2(1.1, 1.2)
 sprite_frames = SubResource("SpriteFrames_dg5fb")
-animation = &"run_down"
+animation = &"idle_down"
 autoplay = "idle_down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=152756907]
