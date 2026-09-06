@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://df26e2sh8n8um" path="res://player.tscn" id="1_80nbo"]
 [ext_resource type="Texture2D" uid="uid://0flsgu5s3ymg" path="res://assets/TileMap/Solaria Demo Tiles.png" id="1_e2o6t"]
 [ext_resource type="TileSet" uid="uid://t2x4n1chv2hw" path="res://resources/tileset.tres" id="2_feb5d"]
+[ext_resource type="Script" uid="uid://btyqrhbisvatp" path="res://scripts/npc.gd" id="4_fc0e3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_feb5d"]
 texture = ExtResource("1_e2o6t")
@@ -616,6 +617,7 @@ tile_map_data = PackedByteArray("AADv////AAAJAAUAAADv/wAAAAAJAAYAAAD9////AAAJAAU
 tile_set = ExtResource("2_feb5d")
 
 [node name="Player" parent="." unique_id=1520507009 instance=ExtResource("1_80nbo")]
+visible = false
 z_index = 1
 position = Vector2(-160, -80)
 
@@ -623,3 +625,12 @@ position = Vector2(-160, -80)
 z_index = 1
 position = Vector2(8, 8)
 zoom = Vector2(4, 4)
+
+[node name="NPC" parent="." unique_id=357475218 instance=ExtResource("1_80nbo")]
+z_index = 1
+position = Vector2(-80, 64)
+script = ExtResource("4_fc0e3")
+
+[node name="Timer" type="Timer" parent="NPC" unique_id=1454861649]
+
+[connection signal="timeout" from="NPC/Timer" to="NPC" method="_on_timer_timeout"]
