@@ -45,7 +45,11 @@ func _normal_movement():
 			ray_cast_2d.force_raycast_update()
 		
 		# Checks if the player collision is colliding. If yes, returns.
-		if ray_cast_2d.is_colliding(): return
+		if ray_cast_2d.is_colliding():
+			if _not_cliff_face():
+				print("valid path")
+			else:
+				return
 		
 		# Computes the next target position of the player.
 		var targetPosition = global_position + direction * TILE_SIZE
@@ -62,7 +66,7 @@ func _move_to(targetPosition):
 	onMove = false
 
 func _set_animation():
-	if not ray_cast_2d.is_colliding():
+	if not ray_cast_2d.is_colliding() or _not_cliff_face():
 		if currentDirection.x > 0:
 			animated_sprite_2d.flip_h = false
 			animated_sprite_2d.play("run_side")
@@ -137,3 +141,23 @@ func _has_forced_movement():
 				_idle_animation()
 				_move_to(targetPosition)
 				return true
+
+func _not_cliff_face():
+	var cliff_tilemap = get_node("/root/Game/TileMap/OneWay")
+	
+	if cliff_tilemap:
+		var cell = cliff_tilemap.local_to_map(position + currentDirection*TILE_SIZE)
+		var data = cliff_tilemap.get_cell_tile_data(cell)
+		if data:
+			var is_cliff = data.get_custom_data("is_cliff")
+			if is_cliff:
+				var cliff_barrier = data.get_custom_data("cliff_barrier")
+				if currentDirection == Vector2.UP or currentDirection == Vector2.DOWN:
+					if currentDirection.y == cliff_barrier.y:
+						return false
+				elif currentDirection == Vector2.LEFT or currentDirection == Vector2.RIGHT:
+					if currentDirection.x == cliff_barrier.x:
+						return false
+				return true
+	return false
+	
